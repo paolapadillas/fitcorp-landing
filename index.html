@@ -520,7 +520,7 @@
   </div>
 
   <!-- Video controls -->
-  <div class="video-embed-bar">
+  <div class="video-embed-bar" id="videoEmbedBar">
     <label class="upload-btn" for="videoFileInput">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       Upload Video
@@ -530,14 +530,15 @@
     <input type="text" id="videoUrl" placeholder="Paste YouTube or Vimeo URL…" />
     <button onclick="setVideoUrl()">Set</button>
   </div>
+  <div id="videoLockedBar" style="display:none;"></div>
 </div>
 
 <!-- Stats Strip -->
 <div class="stats">
   <div class="stat"><div class="stat-num">78%</div><div class="stat-label" data-lang-key="stat1">Avg. Participation Rate</div></div>
   <div class="stat"><div class="stat-num">30</div><div class="stat-label" data-lang-key="stat2">Days to Culture Shift</div></div>
-  <div class="stat"><div class="stat-num">0</div><div class="stat-label" data-lang-key="stat3">Admin Overhead</div></div>
-  <div class="stat"><div class="stat-num">500+</div><div class="stat-label" data-lang-key="stat4">Companies Transformed</div></div>
+  <div class="stat"><div class="stat-num">0</div><div class="stat-label" data-lang-key="stat3">Setup Time</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label" data-lang-key="stat4">Customizable</div></div>
 </div>
 
 <!-- Why Section -->
@@ -636,7 +637,7 @@
   const T = {
     en: {
       navCta:"Get Demo Access",stat1:"Avg. Participation Rate",stat2:"Days to Culture Shift",
-      stat3:"Admin Overhead",stat4:"Companies Transformed",whyLabel:"Why FitCorp",
+      stat3:"Setup Time",stat4:"Customizable",whyLabel:"Why FitCorp",
       card1title:"Unrivaled Engagement",card1body:"Average 78% participation rate across entire organizations, bridging the gap between remote and in-office teams.",
       card2title:"Measurable Health ROI",card2body:"Track collective progress, miles logged, and active minutes on a customized corporate dashboard.",
       card3title:"Zero Admin Burden",card3body:"We handle onboarding, daily engagement, tech support, and prize fulfillment. You take all the credit.",
@@ -646,7 +647,7 @@
     },
     es: {
       navCta:"Solicitar Demo",stat1:"Tasa de Participación Promedio",stat2:"Días para el Cambio Cultural",
-      stat3:"Carga Administrativa",stat4:"Empresas Transformadas",whyLabel:"Por Qué FitCorp",
+      stat3:"Tiempo de Configuración",stat4:"100% Personalizable",whyLabel:"Por Qué FitCorp",
       card1title:"Participación Sin Igual",card1body:"Tasa de participación promedio del 78% en toda la organización, uniendo equipos remotos y presenciales.",
       card2title:"ROI de Salud Medible",card2body:"Rastrea el progreso colectivo, kilómetros registrados y minutos activos en un panel corporativo personalizado.",
       card3title:"Cero Carga Administrativa",card3body:"Nos encargamos del onboarding, engagement diario, soporte técnico y entrega de premios. Tú te llevas el crédito.",
@@ -748,6 +749,7 @@
         obs.observe(nativeVideo);
       }
     }
+    lockVideo();
   }
 
   function playVideo() {
@@ -793,6 +795,17 @@
       }, { threshold: 0.4 });
       obs.observe(nativeVideo);
     }
+    lockVideo();
+  }
+
+  function lockVideo() {
+    document.getElementById('videoEmbedBar').style.display = 'none';
+    document.getElementById('videoLockedBar').style.display = 'block';
+  }
+
+  function unlockVideo() {
+    document.getElementById('videoEmbedBar').style.display = 'flex';
+    document.getElementById('videoLockedBar').style.display = 'none';
   }
 </script>
 </body>
