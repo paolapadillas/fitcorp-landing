@@ -745,23 +745,6 @@
     }
   }
 
-  // Pause video on scroll when out of view
-  if ('IntersectionObserver' in window) {
-    var videoWrapper = document.getElementById('videoWrapper');
-    var obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (!e.isIntersecting) {
-          var vEN = document.getElementById('videoEN');
-          var vES = document.getElementById('videoES');
-          [vEN, vES].forEach(function(v) {
-            if (v) v.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-          });
-        }
-      });
-    }, { threshold: 0.1 });
-    if (videoWrapper) obs.observe(videoWrapper);
-  }
-
   // ── VIDEO ──
   // Videos are fixed per language - switched in setLang()
 
@@ -769,6 +752,11 @@
   function openModal() {
     document.getElementById('modalOverlay').classList.add('open');
     document.body.style.overflow = 'hidden';
+    // Pause active video
+    ['videoEN','videoES'].forEach(function(id) {
+      var v = document.getElementById(id);
+      if (v) v.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+    });
   }
   function closeModal() {
     document.getElementById('modalOverlay').classList.remove('open');
