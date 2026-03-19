@@ -436,6 +436,87 @@
     transition: background 0.2s;
   }
   .upload-btn:hover { background: var(--navy-mid); }
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(13,27,42,0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 480px;
+    width: 90%;
+    position: relative;
+    animation: fadeUp 0.3s ease both;
+  }
+  .modal h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+  .modal p { font-size: 14px; color: var(--gray); margin-bottom: 24px; }
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 20px;
+    background: none; border: none;
+    font-size: 22px; cursor: pointer;
+    color: var(--gray);
+  }
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    color: var(--navy);
+    outline: none;
+    transition: border 0.2s;
+    background: #fff;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--cyan); }
+  .form-group textarea { resize: none; height: 80px; }
+  .form-submit {
+    width: 100%;
+    background: var(--cyan);
+    color: var(--navy);
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 6px 24px rgba(43,203,218,0.35);
+    margin-top: 4px;
+  }
+  .form-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(43,203,218,0.5); }
+  .form-success { display: none; text-align: center; padding: 20px 0; }
+  .form-success svg { color: var(--cyan); margin-bottom: 12px; }
+  .form-success h4 { font-size: 18px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+  .form-success p { color: var(--gray); font-size: 14px; }
 </style>
 </head>
 <body>
@@ -463,7 +544,7 @@
       </div>
     </div>
   </a>
-  <button class="nav-cta" data-en="Get Demo Access" data-es="Solicitar Demo">Get Demo Access</button>
+  <button class="nav-cta" onclick="openModal()" data-en="Learn More" data-es="Más Información">Learn More</button>
 </nav>
 
 <!-- Hero -->
@@ -484,7 +565,7 @@
     <span data-lang="es">Un reto de fitness en equipo, diseñado para equipos remotos e híbridos. Mejora el ánimo, reduce el agotamiento y disminuye los costos de salud.</span>
   </p>
 
-  <a href="#" class="cta-primary">
+  <a href="#" class="cta-primary" onclick="openModal(); return false;">
     <span data-lang="en" class="active">Start Your Challenge</span>
     <span data-lang="es">Comienza Tu Reto</span>
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -497,14 +578,14 @@
 
     <!-- English video -->
     <iframe id="videoEN"
-      src="https://www.youtube.com/embed/m9_oFqPAcv0?autoplay=1&mute=1&loop=1&playlist=m9_oFqPAcv0&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3"
+      src="https://www.youtube.com/embed/m9_oFqPAcv0?rel=0&modestbranding=1"
       style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; display:block;"
       allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       referrerpolicy="strict-origin-when-cross-origin"></iframe>
 
     <!-- Spanish video -->
     <iframe id="videoES"
-      src="https://www.youtube.com/embed/8W7TRYrpK0Y?autoplay=1&mute=1&loop=1&playlist=8W7TRYrpK0Y&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3"
+      src="https://www.youtube.com/embed/8W7TRYrpK0Y?rel=0&modestbranding=1"
       style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; display:none;"
       allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       referrerpolicy="strict-origin-when-cross-origin"></iframe>
@@ -596,10 +677,10 @@
     <span data-lang="es">¿Listo para Transformar tu Equipo?</span>
   </h2>
   <p>
-    <span data-lang="en" class="active">Join 500+ forward-thinking companies already building healthier, happier workplaces.</span>
-    <span data-lang="es">Únete a más de 500 empresas que ya están construyendo lugares de trabajo más saludables y felices.</span>
+    <span data-lang="en" class="active">Join the companies already transforming their culture and building healthier, happier teams.</span>
+    <span data-lang="es">Únete a las empresas que ya están transformando su cultura y construyendo equipos más saludables y felices.</span>
   </p>
-  <a href="#" class="cta-primary">
+  <a href="#" class="cta-primary" onclick="openModal(); return false;">
     <span data-lang="en" class="active">Start Your Challenge Today</span>
     <span data-lang="es">Comienza Tu Reto Hoy</span>
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -608,13 +689,13 @@
 
 <!-- Footer -->
 <footer>
-  © 2025 FitCorp. All rights reserved. · <a href="#" style="color:var(--cyan); text-decoration:none;">Privacy</a> · <a href="#" style="color:var(--cyan); text-decoration:none;">Terms</a>
+  © 2026 FitCorp by Kinedu
 </footer>
 
 <script>
   const T = {
     en: {
-      navCta:"Get Demo Access",stat1:"Avg. Participation Rate",stat2:"Days to Culture Shift",
+      navCta:"Learn More",stat1:"Avg. Participation Rate",stat2:"Days to Culture Shift",
       stat3:"Setup Time",stat4:"Customizable",whyLabel:"Why FitCorp",
       card1title:"Unrivaled Engagement",card1body:"Average 78% participation rate across entire organizations, bridging the gap between remote and in-office teams.",
       card2title:"Measurable Health ROI",card2body:"Track collective progress, miles logged, and active minutes on a customized corporate dashboard.",
@@ -624,7 +705,7 @@
       step3title:"Celebrate & Measure",step3body:"Review real ROI data, celebrate winners, and see culture transform."
     },
     es: {
-      navCta:"Solicitar Demo",stat1:"Tasa de Participación Promedio",stat2:"Días para el Cambio Cultural",
+      navCta:"Más Información",stat1:"Tasa de Participación Promedio",stat2:"Días para el Cambio Cultural",
       stat3:"Tiempo de Configuración",stat4:"100% Personalizable",whyLabel:"Por Qué FitCorp",
       card1title:"Participación Sin Igual",card1body:"Tasa de participación promedio del 78% en toda la organización, uniendo equipos remotos y presenciales.",
       card2title:"ROI de Salud Medible",card2body:"Rastrea el progreso colectivo, kilómetros registrados y minutos activos en un panel corporativo personalizado.",
@@ -658,6 +739,117 @@
   // ── VIDEO ──
   // Videos are fixed per language - switched in setLang()
 
+  // ── MODAL ──
+  function openModal() {
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+  function submitForm(e) {
+    e.preventDefault();
+    var name    = document.getElementById('fname').value;
+    var company = document.getElementById('fcompany').value;
+    var email   = document.getElementById('femail').value;
+    var size    = document.getElementById('fsize').value;
+    var notes   = document.getElementById('fnotes').value;
+
+    var body = 'Name: ' + name + '\nCompany: ' + company + '\nEmail: ' + email + '\nTeam Size: ' + size + '\nNotes: ' + notes;
+
+    fetch('https://formsubmit.co/ajax/paolapadilla@kinedu.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ name: name, company: company, email: email, teamSize: size, notes: notes, _subject: 'FitCorp - Nueva solicitud de ' + name })
+    }).then(function() {
+      document.getElementById('formContent').style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    }).catch(function() {
+      document.getElementById('formContent').style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    });
+  }
 </script>
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="formContent">
+      <h3>
+        <span data-lang="en" class="active">Let's Get Started</span>
+        <span data-lang="es">Empecemos</span>
+      </h3>
+      <p>
+        <span data-lang="en" class="active">Fill out the form and we'll be in touch shortly.</span>
+        <span data-lang="es">Llena el formulario y te contactamos pronto.</span>
+      </p>
+      <form id="contactForm" onsubmit="submitForm(event)">
+        <div class="form-group">
+          <label>
+            <span data-lang="en" class="active">Full Name *</span>
+            <span data-lang="es">Nombre completo *</span>
+          </label>
+          <input type="text" id="fname" required placeholder="Ana García" />
+        </div>
+        <div class="form-group">
+          <label>
+            <span data-lang="en" class="active">Company *</span>
+            <span data-lang="es">Empresa *</span>
+          </label>
+          <input type="text" id="fcompany" required placeholder="Kinedu" />
+        </div>
+        <div class="form-group">
+          <label>
+            <span data-lang="en" class="active">Work Email *</span>
+            <span data-lang="es">Email de trabajo *</span>
+          </label>
+          <input type="email" id="femail" required placeholder="ana@empresa.com" />
+        </div>
+        <div class="form-group">
+          <label>
+            <span data-lang="en" class="active">Team Size *</span>
+            <span data-lang="es">Tamaño del equipo *</span>
+          </label>
+          <select id="fsize" required>
+            <option value="" disabled selected>
+              <span data-lang="en" class="active">Select...</span>
+            </option>
+            <option value="1-50">1 – 50</option>
+            <option value="51-200">51 – 200</option>
+            <option value="201-500">201 – 500</option>
+            <option value="500+">500+</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>
+            <span data-lang="en" class="active">Anything else? (optional)</span>
+            <span data-lang="es">¿Algo más? (opcional)</span>
+          </label>
+          <textarea id="fnotes" placeholder="..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">
+          <span data-lang="en" class="active">Send →</span>
+          <span data-lang="es">Enviar →</span>
+        </button>
+      </form>
+    </div>
+    <div class="form-success" id="formSuccess">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+      <h4>
+        <span data-lang="en" class="active">Message sent!</span>
+        <span data-lang="es">¡Mensaje enviado!</span>
+      </h4>
+      <p>
+        <span data-lang="en" class="active">We'll be in touch within 24 hours.</span>
+        <span data-lang="es">Te contactamos en menos de 24 horas.</span>
+      </p>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
