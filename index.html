@@ -495,42 +495,20 @@
 <div class="video-section">
   <div class="video-wrapper" id="videoWrapper">
 
-    <!-- Native HTML5 video (autoplay on scroll) -->
-    <video id="nativeVideo" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;" 
-           muted playsinline loop>
-      <source id="nativeVideoSource" src="" type="video/mp4">
-    </video>
+    <!-- English video -->
+    <iframe id="videoEN" 
+      src="https://www.youtube.com/embed/m9_oFqPAcv0?rel=0"
+      style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; display:block;"
+      allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>
 
-    <!-- YouTube / Vimeo iframe -->
-    <iframe id="videoIframe" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; border:none;"
-            allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            referrerpolicy="strict-origin-when-cross-origin"></iframe>
-
-    <!-- Placeholder -->
-    <div class="video-placeholder" id="videoPlaceholder" onclick="playVideo()">
-      <div class="play-btn">
-        <svg viewBox="0 0 24 24" fill="var(--navy)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      </div>
-      <div class="video-label">
-        <span class="video-dot"></span>
-        <span data-lang="en" class="active">Watch the 2-minute overview</span>
-        <span data-lang="es">Ver el resumen de 2 minutos</span>
-      </div>
-    </div>
+    <!-- Spanish video -->
+    <iframe id="videoES"
+      src="https://www.youtube.com/embed/8W7TRYrpK0Y?rel=0"
+      style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; display:none;"
+      allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>
   </div>
-
-  <!-- Video controls -->
-  <div class="video-embed-bar" id="videoEmbedBar">
-    <label class="upload-btn" for="videoFileInput">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      Upload Video
-    </label>
-    <input type="file" id="videoFileInput" accept="video/mp4,video/webm,video/ogg,video/*" style="display:none" onchange="loadLocalVideo(this)" />
-    <span style="color:var(--gray); font-size:12px;">or</span>
-    <input type="text" id="videoUrl" placeholder="Paste YouTube or Vimeo URL…" />
-    <button onclick="setVideoUrl()">Set</button>
-  </div>
-  <div id="videoLockedBar" style="display:none;"></div>
 </div>
 
 <!-- Stats Strip -->
@@ -672,141 +650,14 @@
       if (T[lang][key]) el.textContent = T[lang][key];
     });
     document.querySelector('.nav-cta').textContent = T[lang].navCta;
+    // Switch video
+    document.getElementById('videoEN').style.display = lang === 'en' ? 'block' : 'none';
+    document.getElementById('videoES').style.display = lang === 'es' ? 'block' : 'none';
   }
 
   // ── VIDEO ──
-  function parseVideoUrl(url) {
-    // YouTube
-    var yt = url.match(/[?&]v=([^&\s#]+)/) || url.match(/youtu\.be\/([^?&\s#]+)/);
-    if (yt) return { type: 'iframe', src: 'https://www.youtube.com/embed/' + yt[1] + '?rel=0' };
+  // Videos are fixed per language - switched in setLang()
 
-    // Vimeo
-    var vm = url.match(/vimeo\.com\/(\d+)/);
-    if (vm) return { type: 'iframe', src: 'https://player.vimeo.com/video/' + vm[1] };
-
-    // Google Drive — convert to embed player
-    var gd1 = url.match(/drive\.google\.com\/file\/d\/([^\/\s?]+)/);
-    if (gd1) return { type: 'iframe', src: 'https://drive.google.com/file/d/' + gd1[1] + '/preview' };
-
-    var gd2 = url.match(/drive\.google\.com\/open\?id=([^&\s]+)/);
-    if (gd2) return { type: 'iframe', src: 'https://drive.google.com/file/d/' + gd2[1] + '/preview' };
-
-    var gd3 = url.match(/\/uc\?.*id=([^&\s]+)/);
-    if (gd3) return { type: 'iframe', src: 'https://drive.google.com/file/d/' + gd3[1] + '/preview' };
-
-    // Dropbox
-    if (url.includes('dropbox.com')) {
-      var dlUrl = url.replace('www.dropbox.com', 'dl.dropboxusercontent.com').replace('?dl=0','').replace('dl=0','');
-      return { type: 'video', src: dlUrl };
-    }
-
-    // Direct video file
-    if (/\.(mp4|webm|ogg|mov)/i.test(url)) return { type: 'video', src: url };
-
-    // Fallback: try as iframe
-    return { type: 'iframe', src: url };
-  }
-
-  function setVideoUrl() {
-    var input = document.getElementById('videoUrl');
-    var url = input.value.trim();
-
-    if (!url) {
-      input.style.borderColor = '#2BCBDA';
-      input.focus();
-      setTimeout(function() { input.style.borderColor = ''; }, 2000);
-      return;
-    }
-
-    var parsed = parseVideoUrl(url);
-    var iframe = document.getElementById('videoIframe');
-    var nativeVideo = document.getElementById('nativeVideo');
-    var nativeSource = document.getElementById('nativeVideoSource');
-    var placeholder = document.getElementById('videoPlaceholder');
-
-    // Hide all
-    iframe.style.display = 'none';
-    nativeVideo.style.display = 'none';
-    placeholder.style.display = 'none';
-
-    if (parsed.type === 'iframe') {
-      iframe.src = parsed.src;
-      iframe.style.display = 'block';
-    } else {
-      nativeSource.src = parsed.src;
-      nativeVideo.load();
-      nativeVideo.style.display = 'block';
-      nativeVideo.muted = true;
-      nativeVideo.play().catch(function(){});
-      // Autoplay on scroll
-      if ('IntersectionObserver' in window) {
-        var obs = new IntersectionObserver(function(entries) {
-          entries.forEach(function(e) {
-            if (e.isIntersecting) { nativeVideo.play().catch(function(){}); }
-            else { nativeVideo.pause(); }
-          });
-        }, { threshold: 0.5 });
-        obs.observe(nativeVideo);
-      }
-    }
-    lockVideo();
-  }
-
-  function playVideo() {
-    var url = document.getElementById('videoUrl').value.trim();
-    if (url) {
-      setVideoUrl();
-    } else {
-      var input = document.getElementById('videoUrl');
-      input.placeholder = '¡Pega una URL primero! / Paste a URL first!';
-      input.style.borderColor = '#2BCBDA';
-      input.focus();
-      setTimeout(function() {
-        input.style.borderColor = '';
-        input.placeholder = 'Paste YouTube, Vimeo, Google Drive or .mp4 URL…';
-      }, 3000);
-    }
-  }
-
-  function loadLocalVideo(input) {
-    if (!input.files || !input.files[0]) return;
-    var file = input.files[0];
-    var url = URL.createObjectURL(file);
-    var nativeVideo = document.getElementById('nativeVideo');
-    var nativeSource = document.getElementById('nativeVideoSource');
-    var iframe = document.getElementById('videoIframe');
-    var placeholder = document.getElementById('videoPlaceholder');
-
-    iframe.style.display = 'none';
-    placeholder.style.display = 'none';
-    nativeSource.src = url;
-    nativeVideo.load();
-    nativeVideo.style.display = 'block';
-    nativeVideo.muted = true;
-    nativeVideo.play().catch(function(){});
-
-    // Autoplay on scroll
-    if ('IntersectionObserver' in window) {
-      var obs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (e.isIntersecting) { nativeVideo.play().catch(function(){}); }
-          else { nativeVideo.pause(); }
-        });
-      }, { threshold: 0.4 });
-      obs.observe(nativeVideo);
-    }
-    lockVideo();
-  }
-
-  function lockVideo() {
-    document.getElementById('videoEmbedBar').style.display = 'none';
-    document.getElementById('videoLockedBar').style.display = 'block';
-  }
-
-  function unlockVideo() {
-    document.getElementById('videoEmbedBar').style.display = 'flex';
-    document.getElementById('videoLockedBar').style.display = 'none';
-  }
 </script>
 </body>
 </html>
