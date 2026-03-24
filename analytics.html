@@ -115,8 +115,8 @@
     <div class="kpi-grid">
       <div class="kpi"><div class="kpi-label">Page Views</div><div class="kpi-value c-blue" id="kpi-views">—</div></div>
       <div class="kpi"><div class="kpi-label">Unique Visitors</div><div class="kpi-value c-green" id="kpi-unique">—</div></div>
-      <div class="kpi"><div class="kpi-label">Conversions</div><div class="kpi-value c-purple" id="kpi-conv">—</div></div>
-      <div class="kpi"><div class="kpi-label">Conversion Rate</div><div class="kpi-value c-orange" id="kpi-rate">—</div></div>
+      <div class="kpi"><div class="kpi-label">Inquiries</div><div class="kpi-value c-purple" id="kpi-inq">—</div></div>
+      <div class="kpi"><div class="kpi-label">Inquiry Rate</div><div class="kpi-value c-orange" id="kpi-rate">—</div></div>
     </div>
 
     <div class="card">
@@ -125,7 +125,7 @@
         <div class="tab-group">
           <button class="tab active" onclick="switchTab(this,'views')">Views</button>
           <button class="tab" onclick="switchTab(this,'visitors')">Visitors</button>
-          <button class="tab" onclick="switchTab(this,'conversions')">Conversions</button>
+          <button class="tab" onclick="switchTab(this,'conversions')">Inquiries</button>
         </div>
       </div>
       <div class="chart-wrap"><canvas id="chart-traffic"></canvas></div>
@@ -144,7 +144,7 @@
     <div class="note" id="no-data-note" style="display:none">
       <strong>⚡ Integración pendiente.</strong> Añade este script antes del <code>&lt;/body&gt;</code> en tu <code>index.html</code>:<br><br>
       <code>&lt;script src="fitcorp-analytics.js"&gt;&lt;/script&gt;</code><br><br>
-      Conversión manual: <code>FitCorpAnalytics.trackConversion()</code> — CTA custom: <code>data-track="Nombre botón"</code>
+      Inquiry manual: <code>FitCorpAnalytics.trackConversion()</code> — CTA custom: <code>data-track="Nombre botón"</code>
     </div>
   </main>
 </div>
@@ -195,7 +195,7 @@ function renderDashboard() {
   const n  = parseInt(document.getElementById("range-select").value);
   document.getElementById("last-updated").textContent = "Actualizado: " + new Date().toLocaleTimeString("es-MX");
   if (!db) {
-    ["kpi-views","kpi-unique","kpi-conv"].forEach(id => document.getElementById(id).textContent = "0");
+    ["kpi-views","kpi-unique","kpi-inq"].forEach(id => document.getElementById(id).textContent = "0");
     document.getElementById("kpi-rate").textContent = "0%";
     document.getElementById("no-data-note").style.display = "block";
     renderEmpty("cta-wrap","Sin datos de CTA aún"); renderEmpty("ref-wrap","Sin referrers aún"); renderEmpty("today-wrap","Sin datos hoy");
@@ -205,7 +205,7 @@ function renderDashboard() {
   document.getElementById("no-data-note").style.display = "none";
   document.getElementById("kpi-views").textContent  = fmt(db.pageViews);
   document.getElementById("kpi-unique").textContent = fmt(db.uniqueVisitors);
-  document.getElementById("kpi-conv").textContent   = fmt(db.conversions);
+  document.getElementById("kpi-inq").textContent   = fmt(db.conversions);
   document.getElementById("kpi-rate").textContent   = db.pageViews > 0 ? ((db.conversions/db.pageViews)*100).toFixed(2)+"%" : "0%";
   renderTrafficChart(db, n);
   renderRankedTable("cta-wrap", db.ctaClicks||{}, ["Botón / CTA","Clicks"]);
@@ -215,7 +215,7 @@ function renderDashboard() {
   const d = today();
   renderSimpleTable("today-wrap", {
     "Views hoy": db.dailyViews?.[d]||0,
-    "Conversiones hoy": db.dailyConversions?.[d]||0,
+    "Inquiries hoy": db.dailyConversions?.[d]||0,
     "Tasa hoy": db.dailyViews?.[d] ? (((db.dailyConversions?.[d]||0)/db.dailyViews[d])*100).toFixed(1)+"%" : "0%"
   });
 }
@@ -228,7 +228,7 @@ function renderTrafficChart(db, n) {
   if (activeTab === "visitors") {
     data = days.map(d => Math.round((db?.dailyViews?.[d]||0)*0.65)); color = "#16a34a"; label = "Visitors";
   } else if (activeTab === "conversions") {
-    data = days.map(d => db?.dailyConversions?.[d]||0); color = "#7c3aed"; label = "Conversions";
+    data = days.map(d => db?.dailyConversions?.[d]||0); color = "#7c3aed"; label = "Inquiries";
   } else {
     data = days.map(d => db?.dailyViews?.[d]||0); color = "#2563eb"; label = "Views";
   }
