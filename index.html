@@ -436,7 +436,52 @@
     transition: background 0.2s;
   }
   .upload-btn:hover { background: var(--navy-mid); }
-  /* ── MODAL ── */
+  /* ── REVIEWS ── */
+  .reviews-section {
+    padding: 80px 24px;
+    background: var(--light-bg);
+    text-align: center;
+  }
+  .reviews-grid {
+    max-width: 1100px;
+    margin: 48px auto 0;
+    columns: 3;
+    column-gap: 20px;
+  }
+  .reviews-col-wrapper {
+    display: contents;
+  }
+  [data-lang].reviews-col-wrapper { display: none; }
+  [data-lang].reviews-col-wrapper.active { display: contents; }
+  .review-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    break-inside: avoid;
+    text-align: left;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .review-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(13,27,42,0.08); }
+  .review-card p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--navy);
+    margin-bottom: 16px;
+  }
+  .review-author {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cyan-dark);
+  }
+  @media (max-width: 768px) {
+    .reviews-grid { columns: 1; }
+  }
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .reviews-grid { columns: 2; }
+  }
+</style>
   .modal-overlay {
     display: none;
     position: fixed;
@@ -687,6 +732,49 @@
   </a>
 </div>
 
+<!-- Reviews Section -->
+<div class="reviews-section">
+  <div class="section-label" data-lang-key="reviewsLabel">What They're Saying</div>
+  <h2>
+    <span data-lang="en" class="active">See what people <span style="color:var(--cyan);">are saying</span></span>
+    <span data-lang="es">Lo que la gente <span style="color:var(--cyan);">está diciendo</span></span>
+  </h2>
+
+  <div class="reviews-grid">
+    <!-- EN reviews -->
+    <div data-lang="en" class="active reviews-col-wrapper">
+      <div class="review-card"><p>"I didn't expect to get this into it, but it really helps you build better habits without feeling overwhelming."</p><div class="review-author">Cordelia</div></div>
+      <div class="review-card"><p>"One of the best initiatives the company has introduced. It's not just about working out, it also brings people closer."</p><div class="review-author">Daniela</div></div>
+      <div class="review-card"><p>"It quickly became part of my routine. It helped me stay consistent, which made a big difference."</p><div class="review-author">Paola</div></div>
+      <div class="review-card"><p>"Best year for HR, this initiative is amazing. You can tell it was designed to really add value."</p><div class="review-author">Nathalia</div></div>
+      <div class="review-card"><p>"I really liked that it's not just about fitness, it also creates a lot of team connection."</p><div class="review-author">Laura</div></div>
+      <div class="review-card"><p>"Very motivating for building good habits. I've kept several of them even after it ended."</p><div class="review-author">Ana</div></div>
+      <div class="review-card"><p>"It's great for connecting with your team. The challenges really help bring people together."</p><div class="review-author">Mariana</div></div>
+      <div class="review-card"><p>"I'm not very into fitness and I still enjoyed it a lot. It's easy to follow at your own pace."</p><div class="review-author">Luis</div></div>
+      <div class="review-card"><p>"The best initiative I've seen in the company in a long time. It actually makes an impact."</p><div class="review-author">Mauricio</div></div>
+      <div class="review-card"><p>"Seeing your progress and others' progress keeps you consistent. That's what helped me the most."</p><div class="review-author">Christian</div></div>
+      <div class="review-card"><p>"I liked that everyone can go at their own pace, but you still feel motivated by the group."</p><div class="review-author">Alex</div></div>
+      <div class="review-card"><p>"A great way to break out of the work routine and stay more active day to day."</p><div class="review-author">Sergio</div></div>
+    </div>
+
+    <!-- ES reviews -->
+    <div data-lang="es" class="reviews-col-wrapper">
+      <div class="review-card"><p>"La verdad no pensé que me fuera a enganchar tanto, pero sí te ayuda a cambiar hábitos poco a poco sin que se sienta pesado."</p><div class="review-author">Cordelia</div></div>
+      <div class="review-card"><p>"De las mejores iniciativas que han puesto en la empresa. No solo haces ejercicio, también te acercas más a tus compañeros."</p><div class="review-author">Daniela</div></div>
+      <div class="review-card"><p>"Se volvió parte de mi rutina muy rápido. Me ayudó a ser más constante y eso ya hizo una gran diferencia."</p><div class="review-author">Paola</div></div>
+      <div class="review-card"><p>"Best year for HR, esta iniciativa está increíble. Se nota que pensaron en algo que realmente aporta."</p><div class="review-author">Nathalia</div></div>
+      <div class="review-card"><p>"Me gustó mucho porque no es solo ejercicio, también genera mucha convivencia entre todos."</p><div class="review-author">Laura</div></div>
+      <div class="review-card"><p>"Muy motivador para crear buenos hábitos. Varias cosas las seguí haciendo incluso después de terminar."</p><div class="review-author">Ana</div></div>
+      <div class="review-card"><p>"Está muy bien para convivir más con tu equipo. Los retos ayudan mucho a integrarte."</p><div class="review-author">Mariana</div></div>
+      <div class="review-card"><p>"No soy alguien muy enfocado en el ejercicio y aun así lo disfruté mucho. Es fácil adaptarte a tu ritmo."</p><div class="review-author">Luis</div></div>
+      <div class="review-card"><p>"La mejor iniciativa que he visto en la empresa en mucho tiempo. Sí se siente un impacto real."</p><div class="review-author">Mauricio</div></div>
+      <div class="review-card"><p>"Ver tu progreso y el de los demás te mantiene constante. Eso fue lo que más me ayudó."</p><div class="review-author">Christian</div></div>
+      <div class="review-card"><p>"Me gustó que cada quien puede avanzar a su ritmo, pero al mismo tiempo te motivas con el grupo."</p><div class="review-author">Alex</div></div>
+      <div class="review-card"><p>"Muy buena forma de salir de la rutina del trabajo y activarte un poco más en el día a día."</p><div class="review-author">Sergio</div></div>
+    </div>
+  </div>
+</div>
+
 <!-- Footer -->
 <footer>
   © 2026 FitCorp by Kinedu
@@ -696,7 +784,7 @@
   const T = {
     en: {
       navCta:"Learn More",stat1:"Avg. Participation Rate",stat2:"Days to Culture Shift",
-      stat3:"Setup Time",stat4:"Customizable",whyLabel:"Why FitCorp",
+      stat3:"Setup Time",stat4:"Customizable",whyLabel:"Why FitCorp",reviewsLabel:"What They're Saying",
       card1title:"Unrivaled Engagement",card1body:"Average 78% participation rate across entire organizations, bridging the gap between remote and in-office teams.",
       card2title:"Measurable Health ROI",card2body:"Track collective progress, miles logged, and active minutes on a customized corporate dashboard.",
       card3title:"Zero Admin Burden",card3body:"We handle onboarding, daily engagement, tech support, and prize fulfillment. You take all the credit.",
@@ -706,7 +794,7 @@
     },
     es: {
       navCta:"Más Información",stat1:"Tasa de Participación Promedio",stat2:"Días para el Cambio Cultural",
-      stat3:"Tiempo de Configuración",stat4:"100% Personalizable",whyLabel:"Por Qué FitCorp",
+      stat3:"Tiempo de Configuración",stat4:"100% Personalizable",whyLabel:"Por Qué FitCorp",reviewsLabel:"Lo Que Dicen",
       card1title:"Participación Sin Igual",card1body:"Tasa de participación promedio del 78% en toda la organización, uniendo equipos remotos y presenciales.",
       card2title:"ROI de Salud Medible",card2body:"Rastrea el progreso colectivo, kilómetros registrados y minutos activos en un panel corporativo personalizado.",
       card3title:"Cero Carga Administrativa",card3body:"Nos encargamos del onboarding, engagement diario, soporte técnico y entrega de premios. Tú te llevas el crédito.",
